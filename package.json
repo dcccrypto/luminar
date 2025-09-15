@@ -1,0 +1,25 @@
+{
+  "name": "luminar",
+  "version": "1.0.0",
+  "description": "Web3.5 game with Vercel frontend, Railway backend, Supabase DB, Privy auth, Turnstile bot protection, Solana payouts",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "clean": "turbo run clean"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.12",
+    "@types/node": "^20.8.0",
+    "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

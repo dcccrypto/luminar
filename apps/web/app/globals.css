@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens from PRD */
+:root {
+  --bg: #0B0B0F;
+  --surface: #111216;
+  --surface-2: #15171A;
+  --text: #FFFFFF;
+  --muted: #B7BCC3;
+  --glow: rgba(255,255,255,0.18);
+  --success: #B1F3C1;
+  --error: #F4B1B1;
+  --btn-bg: #FFFFFF;
+  --btn-fg: #0B0B0F;
+  --btn-sheen: linear-gradient(180deg,#FFFFFF 0%,#EDEFF2 40%,#DCE1E6 100%);
+  --radius: 14px;
+  --shadow: 0 6px 22px rgba(0,0,0,.35);
+}
+
+@layer base {
+  * {
+    @apply border-gray-700;
+  }
+  
+  body {
+    @apply bg-bg text-text;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-btn-bg text-btn-fg px-6 py-3 rounded-luminar font-medium;
+    @apply hover:bg-gradient-to-b hover:from-white hover:via-gray-100 hover:to-gray-200;
+    @apply transition-all duration-150 ease-out;
+    @apply shadow-luminar;
+  }
+  
+  .btn-primary:hover {
+    background: var(--btn-sheen);
+  }
+  
+  .card {
+    @apply bg-surface rounded-luminar shadow-luminar p-6;
+  }
+  
+  .card-elevated {
+    @apply bg-surface-2 rounded-luminar shadow-luminar p-6;
+  }
+  
+  .input {
+    @apply bg-surface-2 border border-gray-700 rounded-luminar px-4 py-3;
+    @apply text-text placeholder-muted focus:outline-none focus:ring-2 focus:ring-glow;
+  }
+  
+  .pill {
+    @apply bg-surface-2 text-muted px-3 py-1 rounded-full text-sm;
+  }
+  
+  .toast-success {
+    @apply bg-success text-gray-900 px-4 py-3 rounded-luminar;
+  }
+  
+  .toast-error {
+    @apply bg-error text-gray-900 px-4 py-3 rounded-luminar;
+  }
+  
+  .toast-neutral {
+    @apply bg-surface-2 text-text px-4 py-3 rounded-luminar;
+  }
+  
+  .code-glow {
+    @apply font-mono text-text;
+    text-shadow: 0 0 10px var(--glow);
+  }
+}
