@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
 import { Toast } from '@/components/ui/Toast'
-import { submitClue } from '@/lib/api'
+import { submitClue, getUserProgress } from '@/lib/api'
 
 interface Clue {
   id: number
@@ -33,10 +33,40 @@ export default function CluePage() {
 
   useEffect(() => {
     if (ready && authenticated) {
-      // TODO: Replace with actual API call
-      // fetchClue(chapterId, clueNumber).then(setClue).finally(() => setLoading(false))
-      
-      // Mock data for now
+      loadClueData()
+    }
+  }, [ready, authenticated, chapterId, clueNumber])
+
+  const loadClueData = async () => {
+    try {
+      const accessToken = await getAccessToken()
+      if (!accessToken) {
+        setLoading(false)
+        return
+      }
+
+      // Load user progress to check if this clue is solved
+      const progress = await getUserProgress(accessToken)
+      const isSolved = progress.proofs.some(p => p.clue_id === clueNumber)
+
+      // Mock clue data (in real app, this would come from API)
+      const prompts = [
+        'Find the first glowing fragment in the image.',
+        'Find the second glowing fragment in the image.',
+        'Find the numeric fragment glowing at the edge.'
+      ]
+
+      setClue({
+        id: clueNumber,
+        order_index: clueNumber,
+        prompt: prompts[clueNumber - 1] || `Look carefully at the image. What fragment do you see hidden in clue ${clueNumber}?`,
+        image_url: '/api/placeholder/1280/720',
+        solved: isSolved,
+        fragment: isSolved ? (clueNumber === 1 ? 'lu' : clueNumber === 2 ? 'mi' : '042') : undefined
+      })
+    } catch (error) {
+      console.error('Failed to load clue data:', error)
+      // Fallback to mock data
       setClue({
         id: clueNumber,
         order_index: clueNumber,
@@ -44,12 +74,19 @@ export default function CluePage() {
         image_url: '/api/placeholder/1280/720',
         solved: false,
       })
+    } finally {
       setLoading(false)
     }
-  }, [ready, authenticated, chapterId, clueNumber])
+  }
 
   const handleSubmit = async () => {
     if (!answer.trim()) return
+    
+    // Check if clue is already solved
+    if (clue?.solved) {
+      setToast({ type: 'error', message: 'This clue has already been solved.' })
+      return
+    }
     
     setSubmitting(true)
     try {

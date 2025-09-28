@@ -13,6 +13,9 @@ import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 
+// Coming Soon Mode - Set to true to disable all API endpoints
+const COMING_SOON_MODE = process.env.COMING_SOON_MODE === 'true' || true // Default to true for now
+
 // Import routes
 import cluesRouter from './routes/clues'
 import chaptersRouter from './routes/chapters'
@@ -29,7 +32,11 @@ const PORT = process.env.PORT || 3001
 // Security middleware
 app.use(helmet())
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: [
+    process.env.FRONTEND_URL || 'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002'
+  ],
   credentials: true
 }))
 
@@ -42,11 +49,22 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
-// API routes with versioning
-app.use('/v1/clues', authMiddleware, turnstileMiddleware, cluesRouter)
-app.use('/v1/chapters', authMiddleware, chaptersRouter)
-app.use('/v1/admin', authMiddleware, adminRouter)
-app.use('/v1/user', authMiddleware, userRouter)
+// Coming Soon Mode Middleware
+if (COMING_SOON_MODE) {
+  app.use('/v1/*', (req, res) => {
+    res.status(503).json({
+      error: 'service_unavailable',
+      message: 'Luminar is currently in development. All features will be available at launch.',
+      coming_soon: true
+    })
+  })
+} else {
+  // API routes with versioning
+  app.use('/v1/clues', authMiddleware, turnstileMiddleware, cluesRouter)
+  app.use('/v1/chapters', authMiddleware, chaptersRouter)
+  app.use('/v1/admin', authMiddleware, adminRouter)
+  app.use('/v1/user', authMiddleware, userRouter)
+}
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
