@@ -77,9 +77,9 @@ export default function HomePage() {
                   </div>
                 </div>
               ) : (
-                <Button onClick={login}>
-                  Connect Wallet
-                </Button>
+                <div className="text-sm text-muted">
+                  Connect to Play
+                </div>
               )}
             </div>
           </div>
@@ -156,26 +156,12 @@ export default function HomePage() {
                   </p>
                 </div>
                 
-                {/* Disabled All Buttons */}
+                {/* Single Coming Soon Button */}
                 <Button 
                   disabled
                   className="w-full mb-4 opacity-50 cursor-not-allowed"
                 >
-                  Start Chapter (Coming Soon)
-                </Button>
-                
-                <Button 
-                  disabled
-                  className="w-full mb-4 opacity-50 cursor-not-allowed"
-                >
-                  Connect Wallet (Coming Soon)
-                </Button>
-                
-                <Button 
-                  disabled
-                  className="w-full mb-4 opacity-50 cursor-not-allowed"
-                >
-                  Sign Up (Coming Soon)
+                  Game Features Coming Soon
                 </Button>
               </div>
             </Card>
@@ -210,28 +196,12 @@ export default function HomePage() {
                   Connect your wallet to start solving clues and competing for SOL rewards.
                 </p>
                 
-                {/* Disabled Start Chapter Button */}
-                <Button 
-                  disabled
-                  className="w-full mb-4 opacity-50 cursor-not-allowed"
-                >
-                  Start Chapter (Connect Wallet First)
-                </Button>
-                
                 {/* Connect Wallet Button */}
                 <Button 
                   onClick={login} 
                   className="w-full mb-4"
                 >
                   Connect Wallet
-                </Button>
-                
-                {/* Disabled Sign Up Button */}
-                <Button 
-                  disabled
-                  className="w-full mb-4 opacity-50 cursor-not-allowed"
-                >
-                  Sign Up (Connect Wallet First)
                 </Button>
               </div>
             </Card>
