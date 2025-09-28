@@ -4,7 +4,7 @@ import { usePrivy } from '@privy-io/react-auth'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { SlotsTicker } from '@/components/SlotsTicker'
-import { Globe } from '@/components/Globe'
+import { TigersEyeModel } from '@/components/TigersEyeModel'
 
 export default function HomePage() {
   const { ready, authenticated, user, login } = usePrivy()
@@ -88,9 +88,9 @@ export default function HomePage() {
 
       {/* Main Content - Centered Globe */}
       <main className="flex-1 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
-        {/* Globe Section - Perfectly Centered */}
+        {/* Tigers Eye Model Section - Perfectly Centered */}
         <div className="flex flex-col justify-center items-center mb-16">
-          <Globe size={300} />
+          <TigersEyeModel size={300} />
           <label className="globe-label text-lg text-muted mt-4">
             Discover the Hidden Fragments
           </label>
