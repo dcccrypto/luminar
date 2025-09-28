@@ -31,13 +31,30 @@ interface TigersEye3DProps {
 
 export function TigersEye3D({ size }: TigersEye3DProps) {
   const [isMounted, setIsMounted] = useState(false)
+  const [canRender, setCanRender] = useState(false)
 
   useEffect(() => {
     // Ensure we're fully mounted before rendering 3D content
     setIsMounted(true)
+    
+    // Additional delay to ensure WebGL context is ready
+    const timer = setTimeout(() => {
+      // Double-check WebGL is still available
+      try {
+        const canvas = document.createElement('canvas')
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+        if (gl && (gl instanceof WebGLRenderingContext || gl instanceof WebGL2RenderingContext)) {
+          setCanRender(true)
+        }
+      } catch (error) {
+        console.warn('WebGL context check failed:', error)
+      }
+    }, 300) // Additional delay for WebGL context
+
+    return () => clearTimeout(timer)
   }, [])
 
-  if (!isMounted) {
+  if (!isMounted || !canRender) {
     return (
       <div 
         className="tigers-eye-container"

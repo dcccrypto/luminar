@@ -49,26 +49,46 @@ function TigersEyeFallback({ size }: { size: number }) {
 export function TigersEyeModel({ size = 300, className = '' }: TigersEyeModelProps) {
   const [isClient, setIsClient] = useState(false)
   const [isWebGLSupported, setIsWebGLSupported] = useState(false)
+  const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
     // Check if we're on the client side
     if (typeof window !== 'undefined') {
       setIsClient(true)
       
-      // Check WebGL support
-      try {
-        const canvas = document.createElement('canvas')
-        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
-        setIsWebGLSupported(!!gl)
-      } catch (error) {
-        console.warn('WebGL not supported:', error)
-        setIsWebGLSupported(false)
-      }
+      // Add a delay to ensure DOM is fully ready
+      const timer = setTimeout(() => {
+        // Check WebGL support with more comprehensive validation
+        try {
+          const canvas = document.createElement('canvas')
+          const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+          
+          if (gl) {
+            // Additional WebGL context validation
+            const isWebGLValid = gl instanceof WebGLRenderingContext || gl instanceof WebGL2RenderingContext
+            setIsWebGLSupported(isWebGLValid)
+            
+            if (isWebGLValid) {
+              // Additional delay to ensure everything is ready
+              setTimeout(() => {
+                setIsReady(true)
+              }, 100)
+            }
+          } else {
+            setIsWebGLSupported(false)
+          }
+        } catch (error) {
+          console.warn('WebGL not supported:', error)
+          setIsWebGLSupported(false)
+        }
+      }, 200) // Initial delay to ensure DOM is ready
+
+      return () => clearTimeout(timer)
     }
   }, [])
 
-  // Show fallback during SSR or if WebGL is not supported
-  if (!isClient || !isWebGLSupported) {
+  // Show fallback during SSR, if WebGL is not supported, or if not ready
+  if (!isClient || !isWebGLSupported || !isReady) {
     return <TigersEyeFallback size={size} />
   }
 

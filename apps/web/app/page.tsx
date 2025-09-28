@@ -4,7 +4,7 @@ import { usePrivy } from '@privy-io/react-auth'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { SlotsTicker } from '@/components/SlotsTicker'
-import { TigersEyeModel } from '@/components/TigersEyeModel'
+import { SafeTigersEye } from '@/components/SafeTigersEye' // Ultra-safe 3D component
 
 export default function HomePage() {
   const { ready, authenticated, user, login } = usePrivy()
@@ -90,7 +90,7 @@ export default function HomePage() {
       <main className="flex-1 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
         {/* Tigers Eye Model Section - Perfectly Centered */}
         <div className="flex flex-col justify-center items-center mb-16">
-          <TigersEyeModel size={300} />
+          <SafeTigersEye size={300} />
           <label className="globe-label text-lg text-muted mt-4">
             Discover the Hidden Fragments
           </label>
