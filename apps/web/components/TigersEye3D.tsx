@@ -1,6 +1,6 @@
 'use client'
 
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { useGLTF, Environment } from '@react-three/drei'
 
@@ -30,6 +30,35 @@ interface TigersEye3DProps {
 }
 
 export function TigersEye3D({ size }: TigersEye3DProps) {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    // Ensure we're fully mounted before rendering 3D content
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) {
+    return (
+      <div 
+        className="tigers-eye-container"
+        style={{
+          width: `${size}px`,
+          height: `${size}px`,
+          position: 'relative',
+          margin: '0 auto',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#1a1a2e',
+          borderRadius: '50%',
+          border: '2px solid rgba(255, 255, 255, 0.1)',
+        }}
+      >
+        <div className="text-muted">Loading...</div>
+      </div>
+    )
+  }
+
   return (
     <div 
       className="tigers-eye-container"
@@ -48,6 +77,7 @@ export function TigersEye3D({ size }: TigersEye3DProps) {
       <Canvas
         camera={{ position: [0, 0, 5], fov: 50 }}
         style={{ width: '100%', height: '100%' }}
+        gl={{ antialias: true, alpha: true }}
       >
         <Suspense fallback={null}>
           {/* Lighting */}
